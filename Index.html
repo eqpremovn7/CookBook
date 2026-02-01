@@ -2,42 +2,305 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Семейная поваренная книга</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Google Fonts: красивый рукописный для заголовков + читаемый основной -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marck+Script:wght@400;700&family=Inter:wght@400;500;600&display=swap">
+  
   <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 1rem; line-height: 1.5; }
-    header { text-align: center; margin-bottom: 2rem; }
-    .recipe { margin-bottom: 2.5rem; border-bottom: 1px solid #ddd; padding-bottom: 1.5rem; }
-    .recipe img { max-width: 100%; height: auto; border-radius: 8px; }
-    h1, h2 { margin-bottom: .5rem; }
-    .tags { font-size: .9rem; color: #666; }
-    ul { padding-left: 1.2rem; }
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #fff8e7 0%, #f5f5f5 100%);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 3px solid #d4a574;
+      background: rgba(255,255,255,0.8);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      font-family: 'Marck Script', cursive;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      color: #8b4513;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      margin: 0.5rem 0 1rem;
+      font-weight: 500;
+    }
+    
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    nav a {
+      background: #ff8c42;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    
+    nav a:hover {
+      background: #e67e22;
+      transform: translateY(-2px);
+    }
+    
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 100px;
+    }
+    
+    .section h2 {
+      font-family: 'Marck Script', cursive;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: #d4a574;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    .section h2::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #ff8c42, #d4a574);
+      border-radius: 2px;
+    }
+    
+    .recipe {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(212, 165, 116, 0.2);
+    }
+    
+    .recipe:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    
+    .recipe-title {
+      font-family: 'Marck Script', cursive;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      color: #8b4513;
+      margin: 0 0 0.5rem;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+      line-height: 1.2;
+    }
+    
+    .recipe-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      color: #666;
+    }
+    
+    .recipe-meta span {
+      background: #fff3cd;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    
+    .recipe-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .ingredients, .instructions {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .ingredients h3, .instructions h3 {
+      color: #d4a574;
+      font-family: 'Marck Script', cursive;
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .ingredients h3::before {
+      content: "🥘";
+      font-size: 1.2rem;
+    }
+    
+    .instructions h3::before {
+      content: "🔪";
+      font-size: 1.2rem;
+    }
+    
+    .ingredient, .step {
+      padding: 0.8rem;
+      background: #f8f9fa;
+      border-left: 4px solid #ff8c42;
+      border-radius: 0 8px 8px 0;
+      padding-left: 1rem;
+    }
+    
+    .notes {
+      background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+      padding: 1.2rem;
+      border-radius: 12px;
+      border-left: 5px solid #fdcb6e;
+      font-style: italic;
+      color: #856404;
+    }
+    
+    /* Мобильная оптимизация */
+    @media (max-width: 768px) {
+      .container { padding: 1rem; }
+      .recipe { padding: 1.5rem; }
+      nav { flex-direction: column; align-items: center; }
+    }
+    
+    /* Плавная прокрутка */
+    html { scroll-behavior: smooth; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Семейная поваренная книга</h1>
-    <p>Наши любимые рецепты дома</p>
-  </header>
+  <div class="container">
+    <header>
+      <h1>Семейная поваренная книга</h1>
+      <p class="subtitle">Наши любимые рецепты дома ❤️</p>
+      <nav>
+        <a href="#breakfast">Завтраки</a>
+        <a href="#lunch">Обед</a>
+        <a href="#dinner">Ужин</a>
+        <a href="#dessert">Десерты</a>
+      </nav>
+    </header>
 
-  <section class="recipe">
-    <h2>Омлет по‑семейному</h2>
-    <p class="tags">Завтрак · 15 минут</p>
-    <img src="images/omelet.jpg" alt="Омлет по‑семейному">
-    <h3>Ингредиенты</h3>
-    <ul>
-      <li>3 яйца</li>
-      <li>50 мл молока</li>
-      <li>Соль, перец по вкусу</li>
-    </ul>
-    <h3>Приготовление</h3>
-    <ol>
-      <li>Смешать яйца с молоком, посолить и поперчить.</li>
-      <li>Разогреть сковороду, вылить смесь.</li>
-      <li>Готовить на среднем огне до желаемой степени.</li>
-    </ol>
-    <p><em>Заметка: любимый завтрак жены.</em></p>
-  </section>
+    <main>
+      <!-- ЗАВТРАКИ -->
+      <section id="breakfast" class="section">
+        <h2>Завтраки</h2>
+        <article class="recipe">
+          <h3 class="recipe-title">Омлет по‑семейному</h3>
+          <div class="recipe-meta">
+            <span>15 минут</span>
+            <span>1 порция</span>
+            <span>Простой</span>
+          </div>
+          <img src="https://images.unsplash.com/photo-1541599468178-c4bd57b70fe2?w=800&auto=format" alt="Омлет" class="recipe-image">
+          
+          <div class="ingredients">
+            <h3>Ингредиенты</h3>
+            <div class="ingredient">3 яйца</div>
+            <div class="ingredient">50 мл молока</div>
+            <div class="ingredient">Соль, перец по вкусу</div>
+            <div class="ingredient">50 г тёртого сыра (по желанию)</div>
+          </div>
+          
+          <div class="instructions">
+            <h3>Приготовление</h3>
+            <div class="step">1. Взбить яйца с молоком, посолить, поперчить.</div>
+            <div class="step">2. Разогреть сковороду с маслом, вылить смесь.</div>
+            <div class="step">3. Посыпать сыром за 1 минуту до готовности.</div>
+          </div>
+          
+          <div class="notes">
+            Любимый завтрак жены! Готовим каждое воскресенье.
+          </div>
+        </article>
+      </section>
 
+      <!-- ОБЕД -->
+      <section id="lunch" class="section">
+        <h2>Обед</h2>
+        <article class="recipe">
+          <h3 class="recipe-title">Куриный суп с лапшой</h3>
+          <div class="recipe-meta">
+            <span>40 минут</span>
+            <span>4 порции</span>
+            <span>Средний</span>
+          </div>
+          <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&auto=format" alt="Куриный суп" class="recipe-image">
+          
+          <div class="ingredients">
+            <h3>Ингредиенты</h3>
+            <div class="ingredient">500 г куриного филе</div>
+            <div class="ingredient">200 г лапши</div>
+            <div class="ingredient">2 моркови</div>
+            <div class="ingredient">1 луковица</div>
+            <div class="ingredient">Зелень, соль, специи</div>
+          </div>
+          
+          <div class="instructions">
+            <h3>Приготовление</h3>
+            <div class="step">1. Сварить куриный бульон 25 минут.</div>
+            <div class="step">2. Добавить нарезанные овощи, варить 10 минут.</div>
+            <div class="step">3. За 5 минут до конца добавить лапшу.</div>
+          </div>
+          
+          <div class="notes">
+            Рецепт от бабушки. Лечит все болезни!
+          </div>
+        </article>
+      </section>
+
+      <!-- УЖИН -->
+      <section id="dinner" class="section">
+        <h2>Ужин</h2>
+        <!-- Добавь свой рецепт сюда -->
+      </section>
+
+      <!-- ДЕСЕРТЫ -->
+      <section id="dessert" class="section">
+        <h2>Десерты</h2>
+        <!-- Добавь свой рецепт сюда -->
+      </section>
+    </main>
+  </div>
 </body>
 </html>
